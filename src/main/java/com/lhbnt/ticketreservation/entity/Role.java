@@ -2,14 +2,18 @@ package com.lhbnt.ticketreservation.entity;
 
 import com.lhbnt.ticketreservation.entity.enumeration.SystemRole;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "system_roles")
-@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

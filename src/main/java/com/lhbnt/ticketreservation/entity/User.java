@@ -2,15 +2,21 @@ package com.lhbnt.ticketreservation.entity;
 
 import com.lhbnt.ticketreservation.entity.enumeration.SystemRole;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.Set;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
-@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "users")
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +33,7 @@ public class User {
 
     @CreatedDate
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private LocalDate createdDate = LocalDate.now();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

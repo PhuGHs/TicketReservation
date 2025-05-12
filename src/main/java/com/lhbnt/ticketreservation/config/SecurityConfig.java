@@ -1,7 +1,6 @@
 package com.lhbnt.ticketreservation.config;
 
 import com.lhbnt.ticketreservation.exception.CustomAccessDeniedHandler;
-import com.lhbnt.ticketreservation.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
