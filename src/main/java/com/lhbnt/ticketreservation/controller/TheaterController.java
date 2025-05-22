@@ -1,12 +1,10 @@
 package com.lhbnt.ticketreservation.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${api.prefix}/movies")
-@RequiredArgsConstructor
-public class MovieController {
+@RequestMapping("${api.prefix}/theaters")
+public class TheaterController {
 
 }
