@@ -6,14 +6,15 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = "bookings")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

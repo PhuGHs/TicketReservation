@@ -1,28 +1,22 @@
 package com.lhbnt.ticketreservation.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class MovieCreateDTO {
-    @NotBlank
-    @Max(value = 100)
+public class MovieDTO {
+    private UUID id;
     private String title;
-
-    @NotBlank
-    @Max(value = 500)
     private String description;
-
-    private float duration;
-
-    @NotBlank
+    private int duration;
     private String genre;
+    private List<String> imageUrls;
 }

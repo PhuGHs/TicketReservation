@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImageFiledValidator implements ConstraintValidator<ValidImageFile, MultipartFile> {
+public class ImageFileValidator implements ConstraintValidator<ValidImageFile, MultipartFile> {
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
     private static final List<String> ALLOWED_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/webp");
 

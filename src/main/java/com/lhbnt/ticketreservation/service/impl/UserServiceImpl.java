@@ -9,28 +9,23 @@ import com.lhbnt.ticketreservation.entity.Role;
 import com.lhbnt.ticketreservation.entity.User;
 import com.lhbnt.ticketreservation.entity.enumeration.SystemRole;
 import com.lhbnt.ticketreservation.exception.InvalidRequestException;
+import com.lhbnt.ticketreservation.exception.ResourceNotFoundException;
 import com.lhbnt.ticketreservation.exception.UnauthorizedException;
 import com.lhbnt.ticketreservation.repository.RoleRepository;
 import com.lhbnt.ticketreservation.repository.UserRepository;
 import com.lhbnt.ticketreservation.service.UserService;
 import com.lhbnt.ticketreservation.service.mapping.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -47,9 +42,11 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getEmail(), authDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = userRepository.findByEmail(authDto.getEmail()).orElseThrow(
-                () -> new UnauthorizedException(Messages.EMAIL_NOT_FOUND)
+                () -> new ResourceNotFoundException(Messages.EMAIL_NOT_FOUND)
         );
-        return new LoginResponse(userMapper.toDto(user), jwtTokenUtil.generateToken(user.getUsername()));
+        var userDto = userMapper.toDto(user);
+        userDto.setPassword(null);
+        return new LoginResponse(userMapper.toDto(user), jwtTokenUtil.generateToken(user.getEmail()));
     }
 
     @Override

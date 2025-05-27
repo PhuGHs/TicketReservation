@@ -7,4 +7,8 @@ public class Messages {
     public static final String INVALID_CREDENTIALS = "Invalid email or password";
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String INVALID_IMAGE = "Invalid image file";
+    public static final String IMAGE_NOT_FOUND = "Image not found";
+    public static final String MOVIE_NOT_FOUND = "Movie not found";
+    public static final String VALIDATION_FAILED = "Validation failed";
+    public static final String BAD_CREDENTIALS = "Wrong email or password";
 }

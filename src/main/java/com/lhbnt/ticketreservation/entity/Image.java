@@ -1,19 +1,17 @@
 package com.lhbnt.ticketreservation.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "images")
+@Table(name = "images", indexes = {
+        @Index(name = "idx_resource_id", columnList = "resourceId")
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -41,9 +39,8 @@ public class Image {
     @Column(name = "image_order")
     private Integer imageOrder = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie;
+    @Column(name = "resource_id", nullable = false)
+    private UUID resourceId;
 
     @CreationTimestamp
     @Column(name = "created_at")

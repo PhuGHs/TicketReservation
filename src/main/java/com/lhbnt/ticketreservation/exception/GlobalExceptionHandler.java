@@ -1,7 +1,9 @@
 package com.lhbnt.ticketreservation.exception;
 
+import com.lhbnt.ticketreservation.config.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,6 +21,11 @@ public class GlobalExceptionHandler {
 
     public GlobalExceptionHandler(View error) {
         this.error = error;
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, Messages.BAD_CREDENTIALS, request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
