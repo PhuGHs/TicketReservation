@@ -12,4 +12,5 @@ public interface ImageService {
     Image getImage(UUID imageId);
     List<Image> getMovieImages(UUID movieId);
     String getUrl(UUID imageId);
+    List<String> uploadImages(List<MultipartFile> files);
 }

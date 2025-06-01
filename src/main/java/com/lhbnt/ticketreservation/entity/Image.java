@@ -20,7 +20,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false, name = "file_name")
@@ -39,7 +39,7 @@ public class Image {
     @Column(name = "image_order")
     private Integer imageOrder = 0;
 
-    @Column(name = "resource_id", nullable = false)
+    @Column(name = "resource_id")
     private UUID resourceId;
 
     @CreationTimestamp

@@ -76,4 +76,28 @@ public class ImageServiceImpl implements ImageService {
     public String getUrl(UUID imageId) {
         return serverUrl + apiPrefix + "/images/" + imageId;
     }
+
+    @Override
+    public List<String> uploadImages(List<MultipartFile> files) {
+        if (files.isEmpty()) return List.of();
+        List<Image> images = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            var file = files.get(i);
+            Image image = null;
+            try {
+                image = Image.builder()
+                        .imageData(file.getBytes())
+                        .imageOrder(i)
+                        .contentType(file.getContentType())
+                        .fileSize(file.getSize())
+                        .fileName(file.getName())
+                        .build();
+            } catch (IOException e) {
+                log.warn("Skipping file at index {} due to error: {}", i, file.getOriginalFilename(), e);
+                continue;
+            }
+            images.add(image);
+        }
+        return imageRepository.saveAll(images).stream().map((image) -> getUrl(image.getId())).toList();
+    }
 }

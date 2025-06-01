@@ -1,15 +1,15 @@
 package com.lhbnt.ticketreservation.controller;
 
+import com.lhbnt.ticketreservation.annotation.ValidImageFile;
 import com.lhbnt.ticketreservation.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,5 +28,11 @@ public class ImageController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(image.getImageData());
+    }
+
+    @PostMapping()
+    public ResponseEntity<List<String>> uploadImage(@RequestPart(value = "files") @ValidImageFile List<MultipartFile> files) {
+        var urls = imageService.uploadImages(files);
+        return ResponseEntity.ok(urls);
     }
 }

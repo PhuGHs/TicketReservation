@@ -7,7 +7,7 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = ImageFileValidator.class)
+@Constraint(validatedBy = {ImageFileValidator.class, ImageListValidator.class})
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidImageFile {
