@@ -1,13 +1,17 @@
 package com.lhbnt.ticketreservation.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Data
 @Table(name = "theaters")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -11,4 +11,5 @@ public class Messages {
     public static final String MOVIE_NOT_FOUND = "Movie not found";
     public static final String VALIDATION_FAILED = "Validation failed";
     public static final String BAD_CREDENTIALS = "Wrong email or password";
+    public static final String THEATER_NOT_FOUND = "Theater not found";
 }
