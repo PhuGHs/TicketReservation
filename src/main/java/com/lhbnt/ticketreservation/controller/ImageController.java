@@ -22,17 +22,12 @@ public class ImageController {
     public ResponseEntity<byte[]> getImage(@PathVariable UUID id) {
         var image = imageService.getImage(id);
         HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl("public, max-age=31536000, immutable");
         headers.setContentType(MediaType.parseMediaType(image.getContentType()));
         headers.setContentLength(image.getFileSize());
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(image.getImageData());
-    }
-
-    @PostMapping()
-    public ResponseEntity<List<String>> uploadImage(@RequestPart(value = "files") @ValidImageFile List<MultipartFile> files) {
-        var urls = imageService.uploadImages(files);
-        return ResponseEntity.ok(urls);
     }
 }

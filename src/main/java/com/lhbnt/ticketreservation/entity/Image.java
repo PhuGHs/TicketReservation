@@ -1,5 +1,6 @@
 package com.lhbnt.ticketreservation.entity;
 
+import com.lhbnt.ticketreservation.entity.enumeration.ResourceType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +42,10 @@ public class Image {
 
     @Column(name = "resource_id")
     private UUID resourceId;
+
+    @Column(name = "resource_type")
+    @Enumerated(EnumType.STRING)
+    private ResourceType resourceType;
 
     @CreationTimestamp
     @Column(name = "created_at")

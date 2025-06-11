@@ -2,6 +2,7 @@ package com.lhbnt.ticketreservation.service.impl;
 
 import com.lhbnt.ticketreservation.config.Messages;
 import com.lhbnt.ticketreservation.entity.Image;
+import com.lhbnt.ticketreservation.entity.enumeration.ResourceType;
 import com.lhbnt.ticketreservation.exception.ResourceNotFoundException;
 import com.lhbnt.ticketreservation.repository.ImageRepository;
 import com.lhbnt.ticketreservation.service.ImageService;
@@ -31,7 +32,7 @@ public class ImageServiceImpl implements ImageService {
     private String apiPrefix;
 
     @Override
-    public List<Image> addMultipleImages(UUID movieId, List<MultipartFile> files) {
+    public List<String> uploadWithResourceImages(UUID resourceId, ResourceType resourceType, List<MultipartFile> files) {
         if (files.isEmpty()) {
             return List.of();
         }
@@ -41,7 +42,8 @@ public class ImageServiceImpl implements ImageService {
             Image image = null;
             try {
                 image = Image.builder()
-                        .resourceId(movieId)
+                        .resourceId(resourceId)
+                        .resourceType(resourceType)
                         .imageData(file.getBytes())
                         .imageOrder(i)
                         .contentType(file.getContentType())
@@ -54,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
             }
             images.add(image);
         }
-        return imageRepository.saveAll(images);
+        return imageRepository.saveAll(images).stream().map((image) -> getUrl(image.getId())).toList();
     }
 
     @Override
