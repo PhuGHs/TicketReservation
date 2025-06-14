@@ -37,7 +37,7 @@ public class TheaterController {
     }
 
     @GetMapping()
-    ResponseEntity<?> getTheaters(Map<String, String> filters, @PageableDefault(size = 10) Pageable pageable) {
+    ResponseEntity<?> getTheaters(@RequestParam Map<String, String> filters, @PageableDefault(size = 10) Pageable pageable) {
         var result = theaterService.getAllTheaters(filters, pageable);
         return ResponseEntity.ok(result);
     }

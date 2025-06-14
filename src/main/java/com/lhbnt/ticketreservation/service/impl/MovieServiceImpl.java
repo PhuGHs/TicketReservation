@@ -3,14 +3,19 @@ package com.lhbnt.ticketreservation.service.impl;
 import com.lhbnt.ticketreservation.config.Messages;
 import com.lhbnt.ticketreservation.dto.MovieCreateDTO;
 import com.lhbnt.ticketreservation.dto.MovieDTO;
+import com.lhbnt.ticketreservation.dto.PaginationDTO;
 import com.lhbnt.ticketreservation.entity.Movie;
 import com.lhbnt.ticketreservation.entity.enumeration.ResourceType;
 import com.lhbnt.ticketreservation.exception.ResourceNotFoundException;
 import com.lhbnt.ticketreservation.repository.MovieRepository;
 import com.lhbnt.ticketreservation.service.ImageService;
 import com.lhbnt.ticketreservation.service.MovieService;
+import com.lhbnt.ticketreservation.service.mapping.MapperUtils;
 import com.lhbnt.ticketreservation.service.mapping.MovieMapper;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,14 +23,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
 public class MovieServiceImpl implements MovieService {
+    private static final Logger log = LoggerFactory.getLogger(MovieServiceImpl.class);
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final ImageService imageService;
@@ -52,10 +55,19 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Page<MovieDTO> getMovies(Map<String, String> filters, Pageable pageable) {
+    public PaginationDTO<MovieDTO> getMovies(Map<String, String> filters, Pageable pageable) {
         Specification<Movie> spec = getMovieByFilters(filters);
         Page<Movie> movies = movieRepository.findAll(spec, pageable);
-        return movies.map(this.movieMapper::toDto);
+        var movieDTOList = movies.map(this.movieMapper::toDto);
+        for (MovieDTO movie : movieDTOList) {
+            movie.setImageUrls(
+                    imageService.getMovieImages(movie.getId())
+                            .stream()
+                            .map(v -> imageService.getUrl(v.getId()))
+                            .toList()
+            );
+        }
+        return MapperUtils.toPaginationDTO(movieDTOList);
     }
 
     @Override
@@ -73,27 +85,28 @@ public class MovieServiceImpl implements MovieService {
     }
 
     private static Specification<Movie> getMovieByFilters(Map<String, String> filters) {
-        return (root, query, cb) -> {
-            var predicates = cb.conjunction();
+        Specification<Movie> spec = Specification.where(null);
 
-            filters.forEach((k, v) -> {
-                switch (k) {
-                    case "title" -> predicates.getExpressions().add(
-                            cb.like(cb.lower(root.get("title")), "%" + v.toLowerCase() + "%")
-                    );
-                    case "genre" -> predicates.getExpressions().add(
-                            cb.equal(root.get("genre"), v)
-                    );
-                    case "minDuration" -> predicates.getExpressions().add(
-                            cb.greaterThanOrEqualTo(root.get("duration"), v)
-                    );
-                    case "maxDuration" -> predicates.getExpressions().add(
-                            cb.lessThanOrEqualTo(root.get("duration"), v)
-                    );
-                }
-            });
+        for (Map.Entry<String, String> entry : filters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
 
-            return predicates;
-        };
+            switch (key) {
+                case "title" -> spec = spec.and((root, query, cb) ->
+                        cb.like(cb.lower(root.get("title")), "%" + value.toLowerCase() + "%")
+                );
+                case "genre" -> spec = spec.and((root, query, cb) ->
+                        cb.equal(root.get("genre"), value)
+                );
+                case "minDuration" -> spec = spec.and((root, query, cb) ->
+                        cb.greaterThanOrEqualTo(root.get("duration"), Integer.parseInt(value))
+                );
+                case "maxDuration" -> spec = spec.and((root, query, cb) ->
+                        cb.lessThanOrEqualTo(root.get("duration"), Integer.parseInt(value))
+                );
+            }
+        }
+
+        return spec;
     }
 }

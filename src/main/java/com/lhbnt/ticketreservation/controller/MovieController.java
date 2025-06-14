@@ -26,7 +26,6 @@ public class MovieController {
 
     @PostMapping()
     public ResponseEntity<MovieDTO> createMovie(@RequestBody MovieCreateDTO movieCreateDTO) {
-        log.info("Create movie: {}", movieCreateDTO);
         var movie = movieService.createMovie(movieCreateDTO);
         return ResponseEntity.ok(movie);
     }

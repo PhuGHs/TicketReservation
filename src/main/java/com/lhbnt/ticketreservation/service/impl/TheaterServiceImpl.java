@@ -1,15 +1,19 @@
 package com.lhbnt.ticketreservation.service.impl;
 
 import com.lhbnt.ticketreservation.config.Messages;
+import com.lhbnt.ticketreservation.dto.PaginationDTO;
 import com.lhbnt.ticketreservation.dto.TheaterCreateDTO;
 import com.lhbnt.ticketreservation.dto.TheaterDTO;
+import com.lhbnt.ticketreservation.entity.Movie;
 import com.lhbnt.ticketreservation.entity.Theater;
 import com.lhbnt.ticketreservation.exception.ResourceNotFoundException;
 import com.lhbnt.ticketreservation.repository.TheaterRepository;
 import com.lhbnt.ticketreservation.service.TheaterService;
+import com.lhbnt.ticketreservation.service.mapping.MapperUtils;
 import com.lhbnt.ticketreservation.service.mapping.TheaterMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -20,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class TheaterServiceImpl implements TheaterService {
+    private static final Logger log = LoggerFactory.getLogger(TheaterServiceImpl.class);
     private final TheaterRepository theaterRepository;
     private final TheaterMapper theaterMapper;
 
@@ -40,9 +45,9 @@ public class TheaterServiceImpl implements TheaterService {
     }
 
     @Override
-    public Page<TheaterDTO> getAllTheaters(Map<String, String> filters, Pageable pageable) {
+    public PaginationDTO<TheaterDTO> getAllTheaters(Map<String, String> filters, Pageable pageable) {
         Specification<Theater> spec = getTheatersByFilter(filters);
-        return theaterRepository.findAll(spec, pageable).map(theaterMapper::toDto);
+        return MapperUtils.toPaginationDTO(theaterRepository.findAll(spec, pageable).map(theaterMapper::toDto));
     }
 
     @Override
@@ -56,21 +61,22 @@ public class TheaterServiceImpl implements TheaterService {
     }
 
     private static Specification<Theater> getTheatersByFilter(Map<String, String> filters) {
-        return (root, query, cb) -> {
-            var predicates = cb.conjunction();
+        Specification<Theater> spec = Specification.where(null);
 
-            filters.forEach((k, v) -> {
-                switch (k) {
-                    case "name" -> predicates.getExpressions().add(
-                            cb.like(cb.lower(root.get("name")), "%" + v + "%")
-                    );
-                    case "location" -> predicates.getExpressions().add(
-                            cb.like(cb.lower(root.get("location")), "%" + v + "%")
-                    );
-                }
-            });
+        for (Map.Entry<String, String> entry : filters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
 
-            return predicates;
-        };
+            switch (key) {
+                case "name" -> spec = spec.and((root, query, cb) ->
+                        cb.like(cb.lower(root.get("name")), "%" + value.toLowerCase() + "%")
+                );
+                case "location" -> spec = spec.and((root, query, cb) ->
+                        cb.like(cb.lower(root.get("location")), "%" + value.toLowerCase() + "%")
+                );
+            }
+        }
+
+        return spec;
     }
 }

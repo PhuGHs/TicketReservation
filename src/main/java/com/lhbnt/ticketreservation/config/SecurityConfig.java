@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(String.format("%s/auth/**", apiPrefix)).permitAll()
                         .requestMatchers(HttpMethod.GET, String.format("%s/images/**", apiPrefix)).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(getJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(eh -> eh.authenticationEntryPoint(jwtAuthEntryPoint)

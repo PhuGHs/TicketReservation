@@ -2,7 +2,7 @@ package com.lhbnt.ticketreservation.service;
 
 import com.lhbnt.ticketreservation.dto.MovieCreateDTO;
 import com.lhbnt.ticketreservation.dto.MovieDTO;
-import org.springframework.data.domain.Page;
+import com.lhbnt.ticketreservation.dto.PaginationDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +15,6 @@ import java.util.UUID;
 public interface MovieService {
     MovieDTO uploadMovieImages(UUID movieId, List<MultipartFile> images);
     MovieDTO createMovie(MovieCreateDTO movieCreateDTO);
-    Page<MovieDTO> getMovies(Map<String, String> filters, Pageable pageable);
+    PaginationDTO<MovieDTO> getMovies(Map<String, String> filters, Pageable pageable);
     MovieDTO getMovie(UUID id);
 }

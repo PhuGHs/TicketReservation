@@ -1,5 +1,6 @@
 package com.lhbnt.ticketreservation.service;
 
+import com.lhbnt.ticketreservation.dto.PaginationDTO;
 import com.lhbnt.ticketreservation.dto.TheaterCreateDTO;
 import com.lhbnt.ticketreservation.dto.TheaterDTO;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,6 @@ import java.util.UUID;
 public interface TheaterService {
     TheaterDTO createTheater(TheaterCreateDTO theaterCreateDTO);
     TheaterDTO getTheater(UUID id);
-    Page<TheaterDTO> getAllTheaters(Map<String, String> filters, Pageable pageable);
+    PaginationDTO<TheaterDTO> getAllTheaters(Map<String, String> filters, Pageable pageable);
     TheaterDTO updateTheater(UUID id, TheaterCreateDTO theaterCreateDTO);
 }
