@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 public interface ImageService {
     List<String> uploadWithResourceImages(UUID resourceId, ResourceType resourceType, List<MultipartFile> files);
     Image getImage(UUID imageId);

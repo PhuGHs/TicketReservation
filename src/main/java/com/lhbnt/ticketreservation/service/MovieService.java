@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
 public interface MovieService {
     MovieDTO uploadMovieImages(UUID movieId, List<MultipartFile> images);
     MovieDTO createMovie(MovieCreateDTO movieCreateDTO);

@@ -16,13 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Component
+@Service
 public class TheaterServiceImpl implements TheaterService {
     private static final Logger log = LoggerFactory.getLogger(TheaterServiceImpl.class);
     private final TheaterRepository theaterRepository;
