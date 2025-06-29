@@ -23,12 +23,6 @@ public class AuditoriumController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping()
-    public ResponseEntity<?> getAllAuditoriums() {
-        var result = this.auditoriumService.getAll();
-        return ResponseEntity.ok(result);
-    }
-
     @PostMapping()
     public ResponseEntity<?> createAuditorium(@Valid @RequestBody AuditoriumCreateDTO auditorium) {
         var result = this.auditoriumService.create(auditorium);
@@ -39,5 +33,11 @@ public class AuditoriumController {
     public ResponseEntity<?> updateAuditorium(@Valid @RequestBody AuditoriumUpdateDTO auditorium) {
         var result = this.auditoriumService.update(auditorium);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAuditoriumById(@PathVariable UUID id) {
+        this.auditoriumService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

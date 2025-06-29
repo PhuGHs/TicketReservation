@@ -12,5 +12,5 @@ public interface AuditoriumService {
     AuditoriumDTO getById(UUID id);
     AuditoriumDTO update(AuditoriumUpdateDTO auditoriumCreateDTO);
     void deleteById(UUID id);
-    List<AuditoriumDTO> getAll();
+    List<AuditoriumDTO> getAll(UUID theaterId);
 }

@@ -1,6 +1,7 @@
 package com.lhbnt.ticketreservation.controller;
 
 import com.lhbnt.ticketreservation.dto.TheaterCreateDTO;
+import com.lhbnt.ticketreservation.service.AuditoriumService;
 import com.lhbnt.ticketreservation.service.TheaterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TheaterController {
     private final TheaterService theaterService;
+    private final AuditoriumService auditoriumService;
 
     @PostMapping()
     ResponseEntity<?> createTheater(@Valid @RequestBody TheaterCreateDTO theaterCreateDTO) {
@@ -33,6 +35,12 @@ public class TheaterController {
     @GetMapping("/{id}")
     ResponseEntity<?> getTheater(@PathVariable UUID id) {
         var result = theaterService.getTheater(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}/auditoriums")
+    ResponseEntity<?> getTheaterAuditoriums(@PathVariable UUID id) {
+        var result = auditoriumService.getAll(id);
         return ResponseEntity.ok(result);
     }
 

@@ -1,10 +1,12 @@
 package com.lhbnt.ticketreservation.dto;
 
 
+import com.lhbnt.ticketreservation.entity.Seat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data

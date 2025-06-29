@@ -6,6 +6,8 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,8 +23,16 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "seat_id", nullable = false)
-    private Seat seat;
+    @JoinColumn(name = "screening_id", nullable = false)
+    private Screening screening;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "booking_seats",
+            joinColumns = { @JoinColumn(name = "booking_id")},
+            inverseJoinColumns = { @JoinColumn(name = "seat_id")}
+    )
+    private List<Seat> seats = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

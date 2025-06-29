@@ -3,6 +3,7 @@ package com.lhbnt.ticketreservation.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -21,6 +22,9 @@ public class Screening {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @Column(name = "start_time")
     private Instant startTime;

@@ -66,7 +66,8 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     }
 
     @Override
-    public List<AuditoriumDTO> getAll() {
-        return List.of();
+    public List<AuditoriumDTO> getAll(UUID theaterId) {
+        var auditoriums = this.auditoriumRepository.findAllByTheaterId(theaterId);
+        return auditoriums.stream().map(this.auditoriumMapper::toDto).toList();
     }
 }

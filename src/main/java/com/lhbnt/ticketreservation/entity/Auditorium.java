@@ -3,6 +3,8 @@ package com.lhbnt.ticketreservation.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,4 +28,10 @@ public class Auditorium {
 
     @Column(name = "capacity")
     private int capacity;
+
+    @OneToMany(mappedBy = "auditorium", orphanRemoval = true)
+    private List<Seat> seats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "auditorium", orphanRemoval = true)
+    private List<Screening> auditoriums = new ArrayList<>();
 }

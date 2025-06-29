@@ -3,6 +3,8 @@ package com.lhbnt.ticketreservation.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,15 +16,15 @@ public class Seat {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "screening_id")
-    private Screening screening;
+    @JoinColumn(name = "auditorium_id")
+    private Auditorium auditorium;
 
-    @Column(name = "seat_number")
-    private int seatNumber;
+    @Column(name = "row", nullable = false)
+    private String row;
 
-    @Column(name = "is_available")
-    private boolean isAvailable;
+    @Column(name = "number", nullable = false)
+    private Integer number;
 
-    @Column(name = "version")
-    private String version;
+    @ManyToMany(mappedBy = "seats")
+    private List<Booking> bookings = new ArrayList<Booking>();
 }
